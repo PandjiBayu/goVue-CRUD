@@ -15,19 +15,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="movie in $data" :key="movie._id">
+          <tr v-for="movie in movies" :key="movie.id">
             <td>{{ movie.title }}</td>
             <td>{{ movie.genre }}</td>
             <td>{{ movie.year }}</td>
             <td>
               <button class="btn btn-warning" 
-              v-on:click="updateMovie(movie._id)">
+              v-on:click="updateMovie(movie.id)">
                 Update
               </button>
             </td>
             <td>
               <button class="btn btn-danger" 
-              v-on:click="deleteMovie(movie._id)">
+              v-on:click="deleteMovie(movie.id)">
                 Delete
               </button>
             </td>
@@ -97,8 +97,8 @@ export default {
     };
   },
   methods: {
-   refreshMovies() {
-      movieDataService.getAllMovies().then((res) => {
+    refreshMovies() {
+       movieDataService.getAllMovies(this.movies).then((res) => {
         this.movies = res.data;
       }).catch(error => {
           console.log(error);
@@ -108,7 +108,7 @@ export default {
       this.$router.push({name: 'Create'});
     },
     updateMovie(id) {
-      this.$router.push({name: 'Update'});
+      this.$router.push(`/movie/${id}`);
     },
     deleteMovie(id) {
       if(!confirm("Are you sure?")){

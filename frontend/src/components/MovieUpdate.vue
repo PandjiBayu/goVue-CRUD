@@ -28,7 +28,7 @@
           v-model="year" />
         </fieldset>
         <button class="btn btn-success" 
-        type="submit">Save</button>
+        type="submit">Update</button>
       </form>
     </div>
   </div>
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     id() {
-      return this.$route.params._id;
+      return this.$route.params.id;
     },
   },
   methods: {
@@ -74,6 +74,12 @@ export default {
       } else if (this.genre.length < 4) {
         this.errors.push
         ("Enter atleast 4 characters in Genre");
+      }
+      if (!this.year) {
+        this.errors.push("Enter valid values");
+      } else if (this.year.length < 4) {
+        this.errors.push
+        ("Enter correct year");
       }
       if (this.errors.length === 0) {
           movieDataService.updateMovie(this.id, {

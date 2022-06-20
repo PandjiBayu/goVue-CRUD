@@ -41,25 +41,21 @@ export default {
   name: "MovieCreate",
   data() {
     return {
+      id: 0,
       title: "",
       genre: "",
       year: "",
       errors: [],
     };
   },
-  computed: {
-    id() {
-      return this.$route.params._id;
-    },
-  },
   methods: {
-    refreshMovieDetails() {
-      movieDataService.getIdMovie(this.id).then((res) => {
-        this.title = res.data.title;
-        this.genre = res.data.genre;
-        this.year = res.data.year;
-      });
-    },
+    // refreshMovieDetails() {
+    //   movieDataService.getIdMovie(this.id).then((res) => {
+    //     this.title = res.data.title;
+    //     this.genre = res.data.genre;
+    //     this.year = res.data.year;
+    //   });
+    // },
     validateAndSubmit(e) {
       e.preventDefault();
       this.errors = [];
@@ -75,21 +71,28 @@ export default {
         this.errors.push
         ("Enter atleast 4 characters in Genre");
       }
+      if (!this.year) {
+        this.errors.push("Enter valid values");
+      } else if (this.year.length < 4) {
+        this.errors.push
+        ("Enter correct year");
+      }
       if (this.errors.length === 0) {
-        if (this.id == -1) {
+
           movieDataService.createMovie({
+            id: this.id,
             title: this.title,
             genre: this.genre,
             year: this.year,
           }).then(() => {
             this.$router.push({name: 'Movies'});
           });
-        }
+        
       }
     },
   },
-  mounted:function() {
-    this.refreshMovieDetails();
-  },
+  // mounted:function() {
+  //   this.refreshMovieDetails();
+  // },
 };
 </script>
