@@ -23,7 +23,7 @@
            v-model="genre" />
         </fieldset>
         <fieldset class="form-group">
-          <label>Year Release</label>
+          <label>Release Year</label>
           <input type="text" class="form-control" 
           v-model="year" />
         </fieldset>
@@ -55,9 +55,9 @@ export default {
   methods: {
     refreshMovieDetails() {
       movieDataService.getIdMovie(this.id).then((res) => {
-        this.title = res.data.title;
-        this.genre = res.data.genre;
-        this.year = res.data.year;
+        this.title = res.data.data.data.title;
+        this.genre = res.data.data.data.genre;
+        this.year = res.data.data.data.year;
       });
     },
     validateAndSubmit(e) {
@@ -82,6 +82,7 @@ export default {
         ("Enter correct year");
       }
       if (this.errors.length === 0) {
+        console.log('123');
           movieDataService.updateMovie(this.id, {
             id: this.id,
             title: this.title,

@@ -9,25 +9,25 @@
           <tr> 
             <th>Movie's Title</th>
             <th>Genre</th>
-            <th>Year Release</th>
+            <th>Release Year</th>
             <th>Update</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="movie in movies" :key="movie.id">
+          <tr v-for="movie in movies" :key="movie._id">
             <td>{{ movie.title }}</td>
             <td>{{ movie.genre }}</td>
             <td>{{ movie.year }}</td>
             <td>
               <button class="btn btn-warning" 
-              v-on:click="updateMovie(movie.id)">
+              v-on:click="updateMovie(movie._id)">
                 Update
               </button>
             </td>
             <td>
               <button class="btn btn-danger" 
-              v-on:click="deleteMovie(movie.id)">
+              v-on:click="deleteMovie(movie._id)">
                 Delete
               </button>
             </td>
@@ -40,48 +40,6 @@
         v-on:click="addMovie()">Add Movie</button>
       </div>
     </div>
-
-    <!-- modal -->
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-
-          <div class="modal-body">
-              <div class="p-2 w-50 bd-highlight">
-                  <div class="input-group mb-3">
-                      <span class="input-group-text">Movie's Title</span>
-                      <input type="text" class="form-control" v-model="title">
-                  </div>
-
-                  <div class="input-group mb-3">
-                      <span class="input-group-text">Genre</span>
-                      <input type="text" class="form-control" v-model="genre">
-                  </div>
-
-                  <div class="input-group mb-3">
-                      <span class="input-group-text">Year Release</span>
-                      <input type="date" class="form-control" v-model="year">
-                  </div>
-              </div>
-
-              <button type="button" @click="createClick()"
-              v-if="id==0" class="btn btn-primary">
-              Create
-              </button>
-
-              <button type="button" @click="updateClick()"
-              v-if="id!=0" class="btn btn-primary">
-              Update
-              </button>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -98,14 +56,15 @@ export default {
   },
   methods: {
     refreshMovies() {
-       movieDataService.getAllMovies(this.movies).then((res) => {
-        this.movies = res.data;
-      }).catch(error => {
-          console.log(error);
-      });
+        movieDataService.getAllMovies().then((res) => {
+          this.movies = res.data.data.data;
+          console.log(res.data.data.data);
+        }).catch(error => {
+            console.log(error);
+        });
     },
     addMovie() {
-      this.$router.push({name: 'Create'});
+        this.$router.push({name: 'Create'});
     },
     updateMovie(id) {
       this.$router.push(`/movie/${id}`);
@@ -113,35 +72,14 @@ export default {
     deleteMovie(id) {
       if(!confirm("Are you sure?")){
             return;
-        } 
+        }
+        console.log('123');
       movieDataService.deleteMovie(id)
       .then(() => {
         this.refreshMovies();
       });
     },
-    // createClick(){
-    //     movieDataService.createMovie({
-    //         title:this.title,
-    //         genre:this.genre,
-    //         year:this.year
-    //     })
-    //     .then(()=>{
-    //         this.refreshMovies();
-    //         this.$router.push("/movies")
-    //     });
-    // },
-    // updateClick(){
-    //     movieDataService.updateMovie(this.id,{
-    //         id:this.id,
-    //         title:this.title,
-    //         genre:this.genre,
-    //         year:this.year
-    //     })
-    //     .then((response)=>{
-    //         this.refreshMovies();
-    //         this.$router.push("/movies")
-    //     });
-    // },
+    
   },
   created() {
     this.refreshMovies();

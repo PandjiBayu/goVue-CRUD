@@ -23,7 +23,7 @@
            v-model="genre" />
         </fieldset>
         <fieldset class="form-group">
-          <label>Year Release</label>
+          <label>Release Year</label>
           <input type="text" class="form-control" 
           v-model="year" />
         </fieldset>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const MOVIE_API_URL = "http://localhost:3000"
+const MOVIE_API_URL = "http://localhost:5000"
 
 class movieDataService {
 
