@@ -82,7 +82,6 @@ export default {
         ("Enter correct year");
       }
       if (this.errors.length === 0) {
-        console.log('123');
           movieDataService.updateMovie(this.id, {
             id: this.id,
             title: this.title,
@@ -94,7 +93,7 @@ export default {
       }
     },
   },
-  mounted:function() {
+  created() {
     this.refreshMovieDetails();
   },
 };

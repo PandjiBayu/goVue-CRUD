@@ -1,6 +1,13 @@
 <template>
   <div class="container">
-    <h3>DATA MOVIES</h3>
+    <div class="d-flex justify-content-between mb-3 ml-3">
+      <h3>DATA MOVIES</h3>
+
+      <div class="mr-3">
+        <button class="btn btn-success" 
+        v-on:click="addMovie()">Add Movie</button>
+      </div>
+    </div>
 
     <div v-if="message" class="alert alert-success">{{ this.message }}</div>
     <div class="container">
@@ -35,10 +42,6 @@
         </tbody>
       </table>
 
-      <div class="row">
-        <button class="btn btn-success" 
-        v-on:click="addMovie()">Add Movie</button>
-      </div>
     </div>
   </div>
 </template>
@@ -73,7 +76,6 @@ export default {
       if(!confirm("Are you sure?")){
             return;
         }
-        console.log('123');
       movieDataService.deleteMovie(id)
       .then(() => {
         this.refreshMovies();
@@ -84,5 +86,6 @@ export default {
   created() {
     this.refreshMovies();
   },
+  
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        Go Lang + Mongo + Vue.js CRUD Application
+    <div class="navbar-header text-center">
+      <a class="navbar-brand text-dark" href="#">
+        GOLANG, MONGO DB, VUE JS - CRUD APPLICATION
         </a><br/><br/>
     </div>
     <router-view/>

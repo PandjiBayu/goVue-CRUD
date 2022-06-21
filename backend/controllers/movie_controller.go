@@ -33,7 +33,6 @@ func GetAllMovies(c *fiber.Ctx) error {
 		})
 	}
 
-	//reading from the db in an optimal way
 	defer results.Close(ctx)
 	for results.Next(ctx) {
 		var dMovies models.Movie
@@ -64,7 +63,11 @@ func CreateMovie(c *fiber.Ctx) error {
 
 	//validate the request body
 	if err := c.BodyParser(&movie); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.MovieResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(responses.MovieResponse{
+			Status:  http.StatusBadRequest,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 
 	newMovie := models.Movie{
@@ -76,10 +79,18 @@ func CreateMovie(c *fiber.Ctx) error {
 
 	result, err := movieCollection.InsertOne(ctx, newMovie)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 
-	return c.Status(http.StatusCreated).JSON(responses.MovieResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
+	return c.Status(http.StatusCreated).JSON(responses.MovieResponse{
+		Status:  http.StatusCreated,
+		Message: "success",
+		Data:    &fiber.Map{"data": result},
+	})
 }
 
 func EditMovie(c *fiber.Ctx) error {
@@ -92,27 +103,48 @@ func EditMovie(c *fiber.Ctx) error {
 
 	//validate the request body
 	if err := c.BodyParser(&movie); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.MovieResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(responses.MovieResponse{
+			Status:  http.StatusBadRequest,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 
-	update := bson.M{"title": movie.Title, "genre": movie.Genre, "year": movie.Year}
+	update := bson.M{
+		"title": movie.Title,
+		"genre": movie.Genre,
+		"year":  movie.Year,
+	}
 
 	result, err := movieCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
 
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 	//get updated user details
 	var updatedMovie models.Movie
+
 	if result.MatchedCount == 1 {
 		err := movieCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedMovie)
 
 		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+			return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{
+				Status:  http.StatusInternalServerError,
+				Message: "error",
+				Data:    &fiber.Map{"data": err.Error()},
+			})
 		}
 	}
 
-	return c.Status(http.StatusOK).JSON(responses.MovieResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": updatedMovie}})
+	return c.Status(http.StatusOK).JSON(responses.MovieResponse{
+		Status:  http.StatusOK,
+		Message: "success",
+		Data:    &fiber.Map{"data": updatedMovie},
+	})
 }
 
 func GetMovie(c *fiber.Ctx) error {
@@ -125,10 +157,18 @@ func GetMovie(c *fiber.Ctx) error {
 
 	err := movieCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&movie)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 
-	return c.Status(http.StatusOK).JSON(responses.MovieResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": movie}})
+	return c.Status(http.StatusOK).JSON(responses.MovieResponse{
+		Status:  http.StatusOK,
+		Message: "success",
+		Data:    &fiber.Map{"data": movie},
+	})
 }
 
 func DeleteMovie(c *fiber.Ctx) error {
@@ -140,16 +180,28 @@ func DeleteMovie(c *fiber.Ctx) error {
 
 	result, err := movieCollection.DeleteOne(ctx, bson.M{"_id": objId})
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(responses.MovieResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "error",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
 	}
 
 	if result.DeletedCount < 1 {
 		return c.Status(http.StatusNotFound).JSON(
-			responses.MovieResponse{Status: http.StatusNotFound, Message: "error", Data: &fiber.Map{"data": "User with specified ID not found!"}},
+			responses.MovieResponse{
+				Status:  http.StatusNotFound,
+				Message: "error",
+				Data:    &fiber.Map{"data": "User with specified ID not found!"},
+			},
 		)
 	}
 
 	return c.Status(http.StatusOK).JSON(
-		responses.MovieResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": "User successfully deleted!"}},
+		responses.MovieResponse{
+			Status:  http.StatusOK,
+			Message: "success",
+			Data:    &fiber.Map{"data": "User successfully deleted!"},
+		},
 	)
 }

@@ -49,13 +49,6 @@ export default {
     };
   },
   methods: {
-    // refreshMovieDetails() {
-    //   movieDataService.getIdMovie(this.id).then((res) => {
-    //     this.title = res.data.title;
-    //     this.genre = res.data.genre;
-    //     this.year = res.data.year;
-    //   });
-    // },
     validateAndSubmit(e) {
       e.preventDefault();
       this.errors = [];
@@ -91,8 +84,5 @@ export default {
       }
     },
   },
-  // mounted:function() {
-  //   this.refreshMovieDetails();
-  // },
 };
 </script>
